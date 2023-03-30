@@ -16,7 +16,8 @@ jobs:
       - name: On Test End
         run: |
           echo "Test End"
-          echo "github.head_ref: ${{ github.head_ref }}
-          echo "github.ref_name: ${{ github.ref_name }}
-          echo "github.ref_name: ${{ github.event.workflow_run.head_branch }}
+          echo "github.head_ref: ${{ github.head_ref }}"
+          echo "github.ref_name: ${{ github.ref_name }}"
+          echo "github.event.workflow_run.head_branch: ${{ github.event.workflow_run.head_branch }}"
           echo '${{ toJSON(github) }}' | jq -C '.' | sed 's/^/|/g'
+        
