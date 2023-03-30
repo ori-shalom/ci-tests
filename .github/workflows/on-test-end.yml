@@ -17,3 +17,4 @@ jobs:
           echo "Test End"
           echo "github.head_ref: ${{ github.head_ref }}
           echo "github.ref_name: ${{ github.ref_name }}
+          echo '${{ toJSON(github) }}' | jq -C '.' | sed 's/^/|/g'
