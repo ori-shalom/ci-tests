@@ -1,0 +1,23 @@
+name: Workflow 2
+run-name: ${{ github.workflow }} (${{ github.ref_name}})
+on:
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  test:
+    name: Workflow 2
+    runs-on: ubuntu-latest
+    steps:
+      - name: Workflow 2
+        run: |
+          echo "Workflow 2"
+          echo "github.ref_name: ${{ github.ref_name }}"
+          jq -Cn '${{ secrets.MY_SECRET }} + 1'
+          echo '${{ toJSON(github) }}' | jq -C '.' | sed 's/^/|/g'
+          echo '${{ toJSON(secrets) }}' | jq -C '.' | sed 's/^/|/g'
+
+  call-workflow-2:
+    name: Call Workflow 3
+    uses: ./.github/workflows/workflow-3.yml
+    secrets: inherit
