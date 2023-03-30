@@ -1,0 +1,28 @@
+name: Workflow 1
+run-name: >-
+  ${{ github.workflow }} (
+  ${{ 
+    github.event.workflow_run.event.workflow_run.head_branch ||
+    github.event.workflow_run.head_branch ||
+    github.head_ref ||
+    github.ref_name
+  }})
+on:
+  push:
+    branches:
+      - "**"
+  workflow_dispatch: {}
+
+jobs:
+  test:
+    name: Workflow 1
+    runs-on: ubuntu-latest
+    steps:
+      - name: Workflow 1
+        run: |
+          echo "Workflow 1"
+          echo "github.ref_name: ${{ github.ref_name }}"
+          echo "github.head_ref: ${{ github.head_ref }}"
+          echo "github.event.workflow_run.head_branch: ${{ github.event.workflow_run.head_branch }}"
+          echo "github.event.workflow_run.event.workflow_run.head_branch: ${{ github.event.workflow_run.event.workflow_run.head_branch }}"
+          echo '${{ toJSON(github) }}' | jq -C '.' | sed 's/^/|/g'
