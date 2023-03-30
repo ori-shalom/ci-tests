@@ -1,7 +1,7 @@
 name: Workflow 3
 run-name: >-
-  ${{ github.workflow }} (
-  ${{ 
+  ${{ github.workflow }}
+  (${{
     github.event.workflow_run.event.workflow_run.head_branch ||
     github.event.workflow_run.head_branch ||
     github.head_ref ||
@@ -11,8 +11,6 @@ on:
   workflow_run:
     workflows: [Workflow 2]
     types: [completed]
-    branches:
-      - oris/*
   workflow_dispatch: {}
 
 jobs:
