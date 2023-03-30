@@ -5,7 +5,7 @@ on:
     workflows: [Workflow test]
     types: [completed]
     branches:
-      - oris/**
+      - oris/*
 
 jobs:
   test:
