@@ -1,0 +1,14 @@
+name: Workflow test
+run-name: ${{ github.workflow }} (${{ github.head_ref || github.ref_name }})
+on:
+  push:
+    branches:
+      - "**"
+
+jobs:
+  test:
+    name: Test.
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test.
+        run: echo "Test."
