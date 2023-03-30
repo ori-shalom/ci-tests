@@ -1,7 +1,7 @@
 name: Workflow 1
 run-name: >-
-  ${{ github.workflow }} (
-  ${{ 
+  ${{ github.workflow }}
+  (${{
     github.event.workflow_run.event.workflow_run.head_branch ||
     github.event.workflow_run.head_branch ||
     github.head_ref ||
