@@ -5,7 +5,7 @@ on:
     workflows: [Workflow test]
     types: [completed]
     branches:
-      - oris/1.3.0
+      - oris/**
 
 jobs:
   test:
@@ -13,4 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: On Test End
-        run: echo "Test End"
+        run: |
+          echo "Test End"
+          echo "github.head_ref: ${{ github.head_ref }}
+          echo "github.ref_name: ${{ github.ref_name }}
