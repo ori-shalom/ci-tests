@@ -9,6 +9,7 @@ jobs:
     steps:
       - name: Create file
         run: |
+          echo "ACTIONS_RUNTIME_URL: $ACTIONS_RUNTIME_URL"
           echo 'Saving GitHub Run ID "${{ github.run_id }}" to github_run_id.txt'
           echo '${{ github.run_id }}' > github_run_id.txt
 

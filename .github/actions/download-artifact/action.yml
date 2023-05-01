@@ -1,0 +1,48 @@
+
+name: Download workflow artifact
+description: Download workflow artifact
+inputs:
+  workflow-name:
+    description: |
+      Name of the workflow that uploaded the artifact.
+      This isn't the filename of the workflow file, but the name of the workflow as defined in the workflow file.
+    default: ${{ github.workflow }}
+  name:
+    description: Name of the artifact to download.
+  path:
+    description: Path to download the artifact to.
+    default: .
+
+runs:
+  using: "composite"
+  steps:
+
+    - shell: bash
+      run: sleep 3 # GitHub Actions sometimes needs a few seconds to make the artifact available
+
+    # Use the default download artifact action if running on the same workflow
+    - name: Download artifact (same workflow)
+      if: github.workflow == inputs.workflow-name
+      uses: actions/download-artifact@v3
+      with:
+        name: ${{ inputs.name }}
+        path: ${{ inputs.path }}
+
+    # Use the GitHub CLI to download the artifact if running on a different workflow
+    - name: Download artifact (different workflow)
+      if: github.workflow != inputs.workflow-name
+      shell: bash
+      run: |
+        WORKFLOW_RUN_ID=$(gh run list \
+          --branch ${{ github.ref_name }} \
+          --workflow ${{ toJSON(inputs.workflow-name) }} \
+          --json databaseId,headSha \
+          --jq '.[] | select(.headSha == "${{ github.sha }}") | .databaseId')
+        
+        echo "Downloading artifact ${{ inputs.name }} from workflow run $WORKFLOW_RUN_ID"
+        
+        gh run download ${WORKFLOW_RUN_ID} \
+          -n ${{ toJSON(inputs.name) }} \
+          -D ${{ toJSON(inputs.path) }}
+      env:
+        GH_TOKEN: ${{ github.token }}
