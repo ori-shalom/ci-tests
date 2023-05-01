@@ -1,23 +1,25 @@
 name: Workflow 2
 run-name: ${{ github.workflow }} (${{ github.ref_name}})
 on:
-  workflow_dispatch:
   workflow_call:
+  workflow_dispatch:
 
 jobs:
   test:
     name: Workflow 2
     runs-on: ubuntu-latest
     steps:
-      - name: Workflow 2
+      - name: Print GitHub Run ID
         run: |
           echo "Workflow 2"
-          echo "github.ref_name: ${{ github.ref_name }}"
-          jq -Cn '${{ secrets.MY_SECRET }} + 1'
-          echo '${{ toJSON(github) }}' | jq -C '.' | sed 's/^/|/g'
-          echo '${{ toJSON(secrets) }}' | jq -C '.' | sed 's/^/|/g'
+          echo "GitHub Run ID: ${{ github.run_id }}"
 
-  call-workflow-2:
-    name: Call Workflow 3
-    uses: ./.github/workflows/workflow-3.yml
-    secrets: inherit
+      - name: Download file
+        uses: actions/download-artifact@v3
+        with:
+          name: github_run_id
+          path: .
+
+      - name: Print GitHub Run ID from file
+        run: |
+          echo "GitHub Run ID from file: $(cat github_run_id.txt)"

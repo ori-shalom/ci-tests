@@ -1,7 +1,5 @@
 name: Workflow 1
-run-name: ${{ github.workflow }} (${{ github.ref_name }})
 on:
-  workflow_dispatch:
   push:
 
 jobs:
@@ -9,16 +7,17 @@ jobs:
     name: Workflow 1
     runs-on: ubuntu-latest
     steps:
-      - name: Workflow 1
+      - name: Create file
         run: |
-          echo "Workflow 1"
-          echo "github.ref_name: ${{ github.ref_name }}"
-          jq -Cn '${{ secrets.MY_SECRET }} + 1'
-          echo '${{ toJSON(github) }}' | jq -C '.' | sed 's/^/|/g'
-          echo '${{ toJSON(secrets) }}' | jq -C '.' | sed 's/^/|/g'
+          echo 'Saving GitHub Run ID "${{ github.run_id }}" to github_run_id.txt'
+          echo '${{ github.run_id }}' > github_run_id.txt
+
+      - name: Upload file
+        uses: actions/upload-artifact@v3
+        with:
+          name: github_run_id
+          path: github_run_id.txt
 
   call-workflow-2:
     name: Call Workflow 2
-    if: startsWith(github.ref_name, 'release/') || github.ref_name == 'main'
     uses: ./.github/workflows/workflow-2.yml
-    secrets: inherit
